@@ -2,6 +2,9 @@ const taskInput = document.getElementById("taskInput");
 const addTaskButton=document.getElementById("addTaskButton");
 const taskList=document.getElementById("taskList");
 const taskCounter=document.getElementById("taskCounter");
+const allButton = document.getElementById("allButton");
+const pendingButton = document.getElementById("pendingButton");
+const completedButton = document.getElementById("completedButton");
 
 let completedCount=0;
 let tasks=JSON.parse(localStorage.getItem("tasks"))|| [];
@@ -34,11 +37,12 @@ addTaskButton.addEventListener("click", function() {
     if (taskText===""){
         return;
     }
-    tasks.push({
+    const newTaskObject={
         id: Date.now(),
         text: taskText,
         completed: false
-});
+};
+    tasks.push(newTaskObject);
     localStorage.setItem("tasks",JSON.stringify(tasks));
     const newTask=document.createElement("li");
     newTask.textContent=taskText;
@@ -58,7 +62,7 @@ addTaskButton.addEventListener("click", function() {
     deleteButton.textContent="Delete";
     deleteButton.addEventListener("click",function(){ 
     newTask.remove();
-    const taskToDelete=task;
+    const taskToDelete=newTaskObject;
     tasks =tasks.filter(function(item){
         return item.id !==taskToDelete.id;
     });
@@ -89,7 +93,12 @@ function displayTask(task){
     if(task.completed){
         newTask.classList.add("completed");
         completeButton.disabled=true;
-    }
+        taskCounter.textContent =
+        "Total: " + taskList.children.length +
+        " |Completed: " + completedCount +
+        " |Pending: " + (taskList.children.length - completedCount);
+
+    };
 
     newTask.appendChild(completeButton); 
     taskList.appendChild(newTask); 
@@ -102,3 +111,36 @@ taskCounter.textContent=
 "Total:" + taskList.children.length +
 " |Completed: " +completedCount +
 " |Pending: " + (taskList.children.length - completedCount);
+function clearTasks() {
+    taskList.innerHTML = "";
+}
+function showTasks(filter) {
+    clearTasks();
+
+    tasks.forEach(function(task) {
+
+        if (filter === "all") {
+            displayTask(task);
+        }
+
+        if (filter === "pending" && !task.completed) {
+            displayTask(task);
+        }
+
+        if (filter === "completed" && task.completed) {
+            displayTask(task);
+        }
+
+    });
+}
+allButton.addEventListener("click", function() {
+    showTasks("all");
+});
+
+pendingButton.addEventListener("click", function() {
+    showTasks("pending");
+});
+
+completedButton.addEventListener("click", function() {
+    showTasks("completed");
+});
