@@ -17,3 +17,6 @@ button{
     padding:10px 20px;
     cursor:pointer;
 }
+.completed{
+    text-decoration: line-through;
+}

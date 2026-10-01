@@ -10,6 +10,9 @@ addTaskButton.addEventListener("click", function() {
         return;
     }
     const newTask=document.createElement("li");
+    newTask.addEventListener("click",function(){
+        newTask.classList.add("completed");
+    });
     newTask.textContent=taskText;
     const deleteButton=document.createElement("button");
     deleteButton.textContent="Delete";
