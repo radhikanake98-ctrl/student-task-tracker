@@ -10,16 +10,19 @@ addTaskButton.addEventListener("click", function() {
         return;
     }
     const newTask=document.createElement("li");
-    newTask.addEventListener("click",function(){
-        newTask.classList.add("completed");
-    });
     newTask.textContent=taskText;
+    const completeButton=document.createElement("button");
+    completeButton.textContent="Complete";
+    completeButton.addEventListener("click",function(){
+    newTask.classList.add("completed");
+    });
     const deleteButton=document.createElement("button");
     deleteButton.textContent="Delete";
     deleteButton.addEventListener("click",function(){ 
     newTask.remove();
 });
     newTask.appendChild(deleteButton);
+    newTask.appendChild(completeButton);
     taskList.appendChild(newTask);
     taskInput.value="";
 });   
